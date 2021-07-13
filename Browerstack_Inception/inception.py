@@ -15,42 +15,48 @@ load_dotenv()
 ACCESS_KEY = os.getenv('ACCESS_KEY')
 PASS = os.getenv('USER_PASS')
 
-caps = [{
-"os" : "OS X",
-"os_version" : "Catalina",
-"browser" : "Edge",
-"browser_version" : "latest",
-'name': 'Inception-Parallel-Run-1', # test name
- 'build': 'Inception Build ',
- 'browserstack.use_w3c' : 'true'
-},
-{
-"os" : "OS X",
-"os_version" : "Big Sur",
-"browser" : "Chrome",
-"browser_version" : "latest",
-'name': 'Inception-Parallel-Run-2', # test name
- 'build': 'Inception Build ',
- 'browserstack.use_w3c' : 'true'
-},
-{
-"os" : "OS X",
-"os_version" : "Big Sur",
-"browser" : "Edge",
-"browser_version" : "latest",
-'name': 'Inception-Parallel-Run-3', # test name
- 'build': 'Inception Build ',
- 'browserstack.use_w3c' : 'true'
-}]
+caps = [
+    {
+        "os" : "OS X",
+        "os_version" : "Catalina",
+        "browser" : "Edge",
+        "browser_version" : "latest",
+        'name': 'Inception-Parallel-Run-1', # test name
+        'build': 'Inception Build ',
+        'browserstack.use_w3c' : 'true',
+        "browserstack.maskCommands" : "setValues, getValues, setCookies, getCookies"
+    },
+    {
+        "os" : "OS X",
+        "os_version" : "Big Sur",
+        "browser" : "Chrome",
+        "browser_version" : "latest",
+        'name': 'Inception-Parallel-Run-2', # test name
+        'build': 'Inception Build ',
+        'browserstack.use_w3c' : 'true',
+        "browserstack.maskCommands" : "setValues, getValues, setCookies, getCookies"
+    },
+    {
+        "os" : "OS X",
+        "os_version" : "Big Sur",
+        "browser" : "Edge",
+        "browser_version" : "latest",
+        'name': 'Inception-Parallel-Run-3', # test name
+        'build': 'Inception Build ',
+        'browserstack.use_w3c' : 'true',
+        "browserstack.maskCommands" : "setValues, getValues, setCookies, getCookies"
+    }
+]
 
 single_caps = {
-"os" : "OS X",
-"os_version" : "Big Sur",
-"browser" : "Edge",
-"browser_version" : "latest",
-'name': 'Inception-Parallel-Run-3', # test name
- 'build': 'Inception Build ',
- 'browserstack.use_w3c' : 'true'
+    "os" : "Windows",
+    "os_version" : "10",
+    "browser" : "Edge",
+    "browser_version" : "latest",
+    'name': 'Inception-Parallel-Run-3', # test name
+    'build': 'Inception Build ',
+    'browserstack.use_w3c' : 'true',
+    "browserstack.maskCommands" : "setValues, getValues, setCookies, getCookies"
 }
 
 def run_session(desired_cap):
@@ -131,12 +137,17 @@ def run_session(desired_cap):
         print("ACTION")
         if(desired_cap["os"] == 'OS X'):
             action.send_keys(Keys.COMMAND, 'l').perform()
+        else:
+            pass
+            # print(Keys.CONTROL,'l')
+            # action.send_keys(Keys.CONTROL, 'l').perform()
+
         time.sleep(1)
         action.reset_actions()
 
         if(desired_cap["os"] == 'Windows'):
             new_action = ActionChains(driver)
-            new_action.send_keys("browerstack").send_keys(Keys.ENTER).perform()
+            new_action.send_keys("https://www.google.com/search?q=browerstack").send_keys(Keys.ENTER).perform()
         else:
             new_action = ActionChains(driver)
             new_action.send_keys("https://www.google.com/search?q=browerstack").send_keys(Keys.ENTER).perform()
@@ -155,8 +166,8 @@ def run_session(desired_cap):
 
 
 # run_session(caps)
-# run_session(single_caps)
-for cap in caps:
-    run_session(cap)
+run_session(single_caps)
+# for cap in caps:
+#     run_session(cap)
 # for cap in caps:
 #     Thread(target=run_session, args=(cap,)).start()

@@ -10,9 +10,7 @@ const endPoints = {
     "Docs":"/docs"
     }
 
-widths_per = [375, 480, 720, 1280, 1440, 1920]
-
-
+let widths_per = [375, 480, 720, 1280, 1440, 1920]
 
 OPTIONS = {
     snapshot: {

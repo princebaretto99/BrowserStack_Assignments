@@ -14,6 +14,7 @@ from dotenv import load_dotenv
 load_dotenv() 
 
 ACCESS_KEY = os.getenv('ACCESS_KEY')
+USERNAME = os.getenv('USERNAME')
 
 caps = [{
  'os_version': '10',
@@ -21,6 +22,7 @@ caps = [{
  'browser': 'Chrome',
  'browser_version': 'latest',
  'os': 'Windows',
+ "projectName" : "Amazon_testing",
  'name': 'Amazon-Parallel-Run', # test name
  'build': 'Amazon Build Number 1' 
 },
@@ -29,6 +31,7 @@ caps = [{
 "os_version" : "10",
 "browser" : "Firefox",
 "browser_version" : "latest",
+"projectName" : "Amazon_testing",
 'name': 'Amazon-Parallel-Run', # test name
  'build': 'Amazon Build Number 2'
 },
@@ -37,6 +40,7 @@ caps = [{
 "os_version" : "Big Sur",
 "browser" : "Chrome",
 "browser_version" : "latest",
+"projectName" : "Amazon_testing",
 'name': 'Amazon-Parallel-Run', # test name
  'build': 'Amazon Build Number 3'
 },
@@ -45,6 +49,7 @@ caps = [{
 "os_version" : "Big Sur",
 "browser" : "Firefox",
 "browser_version" : "latest",
+"projectName" : "Amazon_testing",
 'name': 'Amazon-Parallel-Run', # test name
  'build': 'Amazon Build Number 4'
 },
@@ -53,13 +58,14 @@ caps = [{
 "os_version" : "10",
 "browser" : "Edge",
 "browser_version" : "latest",
+"projectName" : "Amazon_testing",
 'name': 'Amazon-Parallel-Run', # test name
  'build': 'Amazon Build Number 5'
 }]
 
 def run_session(desired_cap):
     driver = webdriver.Remote(
-        command_executor='https://princetonbaretto_7D2Tbt:'+ACCESS_KEY+'@hub-cloud.browserstack.com/wd/hub',
+        command_executor='https://'+USERNAME+':'+ACCESS_KEY+'@hub-cloud.browserstack.com/wd/hub',
         desired_capabilities=desired_cap)
 
     #initializing Driver Object
