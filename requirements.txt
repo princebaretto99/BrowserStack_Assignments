@@ -17,7 +17,6 @@ outcome==1.1.0
 percy-selenium==1.0.4
 psutil==5.8.0
 pycparser==2.20
-pyOpenSSL==20.0.1
 python-dotenv==0.18.0
 requests==2.25.1
 selenium==3.141.0
