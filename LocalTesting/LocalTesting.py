@@ -17,6 +17,8 @@ username = os.getenv("BROWSERSTACK_USERNAME")
 access_key = os.getenv("BROWSERSTACK_ACCESS_KEY")
 build_name = os.getenv("BROWSERSTACK_BUILD_NAME")
 build = os.getenv("BROWSERSTACK_BUILD")
+local = os.getenv("BROWSERSTACK_LOCAL")
+local_id = os.getenv("BROWSERSTACK_LOCAL_IDENTIFIER")
 
 # print(f"From CI : {username} {access_key} {build_name}")
 
@@ -28,7 +30,8 @@ desired_cap = {
     "projectName" : "Local_testing",
     'name': build_name, # test name
     'build': build,
-    'browserstack.local' : 'true'
+    'browserstack.local' : local,
+    'browserstack.localIdentifier' : local_id
 }
 
 normal_cap = {
@@ -86,7 +89,7 @@ def run_local(desired_cap):
     try:
         bs_local = Local()
 
-        bs_local_args = { "key": access_key }
+        bs_local_args = { "key": access_key , "localIdentifier": local_id}
 
         #starts the Local instance with the required arguments
         bs_local.start(**bs_local_args)
@@ -107,7 +110,7 @@ def run_local(desired_cap):
 
     #stop the Local instance
     except Exception as e:
-        print("Something went wrong!")
+        print(e)
     finally:
         bs_local.stop()
         driver.quit()
