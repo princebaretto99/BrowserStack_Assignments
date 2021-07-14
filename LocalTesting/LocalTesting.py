@@ -11,8 +11,7 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv() 
-ACCESS_KEY = os.getenv('ACCESS_KEY')
-USERNAME = os.getenv('USERNAME')
+
 
 username = os.getenv("BROWSERSTACK_USERNAME")
 access_key = os.getenv("BROWSERSTACK_ACCESS_KEY")
@@ -72,7 +71,7 @@ custom_mobile_cap = {
 
 def run_mobile(mobile_cap):
     driver = webdriver.Remote(
-        command_executor='https://'+USERNAME+':'+ACCESS_KEY+'@hub-cloud.browserstack.com/wd/hub',
+        command_executor='https://'+username+':'+access_key+'@hub-cloud.browserstack.com/wd/hub',
         desired_capabilities=mobile_cap)
     try:
         driver.get("https://www.google.com/search?q=Browserstack")
