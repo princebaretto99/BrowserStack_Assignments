@@ -85,7 +85,7 @@ def run_local(desired_cap):
     # creates an instance of Local
     bs_local = Local()
 
-    bs_local_args = { "key": ACCESS_KEY }
+    bs_local_args = { "key": access_key }
 
     #starts the Local instance with the required arguments
     bs_local.start(**bs_local_args)
@@ -93,7 +93,7 @@ def run_local(desired_cap):
     print(bs_local.isRunning())
 
     driver = webdriver.Remote(
-        command_executor='https://'+USERNAME+':'+ACCESS_KEY+'@hub-cloud.browserstack.com/wd/hub',
+        command_executor='https://'+username+':'+access_key+'@hub-cloud.browserstack.com/wd/hub',
         desired_capabilities=desired_cap)
 
     driver.get("http://localhost:8000/")
@@ -110,7 +110,7 @@ def run_local(desired_cap):
 
 def run_normal(normal_cap):
     driver = webdriver.Remote(
-        command_executor='https://'+USERNAME+':'+ACCESS_KEY+'@hub-cloud.browserstack.com/wd/hub',
+        command_executor='https://'+username+':'+access_key+'@hub-cloud.browserstack.com/wd/hub',
         desired_capabilities=normal_cap)
     try:
         driver.get("https://www.google.com/search?q=Browserstack")
