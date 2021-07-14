@@ -13,11 +13,12 @@ from dotenv import load_dotenv
 load_dotenv() 
 
 
-username = os.getenv("BROWSERSTACK_USERNAME")
+username = os.getenv("BROWSERSTACK_USERNAME") 
 access_key = os.getenv("BROWSERSTACK_ACCESS_KEY")
 build_name = os.getenv("BROWSERSTACK_BUILD_NAME")
+build = os.getenv("BROWSERSTACK_BUILD")
 
-print(f"From CI : {username} {access_key} {build_name}")
+# print(f"From CI : {username} {access_key} {build_name}")
 
 desired_cap = {
     "os" : "Windows",
@@ -25,10 +26,9 @@ desired_cap = {
     "browser" : "Chrome",
     "browser_version" : "latest",
     "projectName" : "Local_testing",
-    'name': 'Local Testing Runs', # test name
-    'build': 'Local Build Number 1',
-    'browserstack.local' : 'true',
-    'browserstack.localIdentifier' : 'Local_Testing_1'
+    'name': build_name, # test name
+    'build': build,
+    'browserstack.local' : 'true'
 }
 
 normal_cap = {
@@ -37,8 +37,8 @@ normal_cap = {
     "browser" : "Chrome",
     "browser_version" : "latest",
     "projectName" : "Normal_testing",
-    'name': 'Normal Testing Runs', # test name
-    'build': 'Normal Build Number 1',
+    'name': build_name, # test name
+    'build': build,
     "browserstack.networkLogs" : "true",
     "browserstack.console" : "verbose",
     "browserstack.geoLocation" : "AR", #ARGENTINA
@@ -51,8 +51,8 @@ good_mobile_cap = {
     "browserstack.networkLogs" : "true",
     "projectName" : "Mobile Runs",
     "browserstack.networkProfile" : "4g-lte-good",
-    'name': 'Iphone 11 ', # test name
-    'build': 'Iphone 11 Build 1 - GOOD',
+    'name': build_name, # test name
+    'build': build,
     "browserstack.appiumLogs" : "false"
 }
 
@@ -65,8 +65,8 @@ custom_mobile_cap = {
     "browserstack.networkLogs" : "true",
     "projectName" : "Mobile Runs",
     "browserstack.customNetwork" : "1000,1000,100,1",
-    'name': 'Iphone 11 ', # test name
-    'build': 'Iphone 11 Build 1 - CUSTOM'
+    'name': build_name, # test name
+    'build': build
 }
 
 def run_mobile(mobile_cap):
@@ -83,30 +83,34 @@ def run_mobile(mobile_cap):
 
 def run_local(desired_cap):
     # creates an instance of Local
-    bs_local = Local()
+    try:
+        bs_local = Local()
 
-    bs_local_args = { "key": access_key }
+        bs_local_args = { "key": access_key }
 
-    #starts the Local instance with the required arguments
-    bs_local.start(**bs_local_args)
+        #starts the Local instance with the required arguments
+        bs_local.start(**bs_local_args)
 
-    print(bs_local.isRunning())
+        print(bs_local.isRunning())
 
-    driver = webdriver.Remote(
-        command_executor='https://'+username+':'+access_key+'@hub-cloud.browserstack.com/wd/hub',
-        desired_capabilities=desired_cap)
+        driver = webdriver.Remote(
+            command_executor='https://'+username+':'+access_key+'@hub-cloud.browserstack.com/wd/hub',
+            desired_capabilities=desired_cap)
 
-    driver.get("http://localhost:8000/")
+        driver.get("http://localhost:8000/")
 
 
-    if(str(driver.title).startswith("D")):
-        driver.execute_script('browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"passed", "reason": "Loaded Locally"}}')
-    else:
-        driver.execute_script('browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"failed", "reason": "Didnt get the Link"}}')
+        if(str(driver.title).startswith("D")):
+            driver.execute_script('browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"passed", "reason": "Loaded Locally"}}')
+        else:
+            driver.execute_script('browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"failed", "reason": "Didnt get the Link"}}')
 
     #stop the Local instance
-    bs_local.stop()
-    driver.quit()
+    except Exception as e:
+        print("Something went wrong!")
+    finally:
+        bs_local.stop()
+        driver.quit()
 
 def run_normal(normal_cap):
     driver = webdriver.Remote(
