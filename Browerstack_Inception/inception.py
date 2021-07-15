@@ -133,16 +133,14 @@ def run_session(desired_cap):
             )
         element.click()
 
-        time.sleep(15)
+        time.sleep(10)
         print("ACTION")
         if(desired_cap["os"] == 'OS X'):
             action.send_keys(Keys.COMMAND, 'l').perform()
         else:
             pass
-            # print(Keys.CONTROL,'l')
-            # action.send_keys(Keys.CONTROL, 'l').perform()
+            action.send_keys(Keys.CONTROL, 'l').perform()
 
-        time.sleep(1)
         action.reset_actions()
 
         if(desired_cap["os"] == 'Windows'):
@@ -152,11 +150,8 @@ def run_session(desired_cap):
             new_action = ActionChains(driver)
             new_action.send_keys("https://www.google.com/search?q=browerstack").send_keys(Keys.ENTER).perform()
 
-        time.sleep(2)
-
         print("DONE")
 
-        time.sleep(5)
         driver.execute_script('browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"passed", "reason": "Passed!"}}')
     except:
         print("Errorr Occured")

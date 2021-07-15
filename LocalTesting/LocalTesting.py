@@ -20,8 +20,6 @@ build = os.getenv("BROWSERSTACK_BUILD")
 local = os.getenv("BROWSERSTACK_LOCAL")
 local_id = os.getenv("BROWSERSTACK_LOCAL_IDENTIFIER")
 
-# print(f"From CI : {username} {access_key} {build_name}")
-
 desired_cap = {
     "os" : "Windows",
     "os_version" : "10",
