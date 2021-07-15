@@ -7,7 +7,7 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import time
+from selenium.common.exceptions import NoSuchElementException
 import os
 from dotenv import load_dotenv
 
@@ -17,51 +17,52 @@ ACCESS_KEY = os.getenv('ACCESS_KEY')
 USERNAME = os.getenv('USERNAME')
 
 caps = [{
- 'os_version': '10',
- 'resolution': '1920x1080',
- 'browser': 'Chrome',
- 'browser_version': 'latest',
- 'os': 'Windows',
- "projectName" : "Amazon_testing",
- 'name': 'Amazon-Parallel-Run', # test name
- 'build': 'Amazon Build Number 1' 
-},
-{
-"os" : "Windows",
-"os_version" : "10",
-"browser" : "Firefox",
-"browser_version" : "latest",
-"projectName" : "Amazon_testing",
-'name': 'Amazon-Parallel-Run', # test name
- 'build': 'Amazon Build Number 2'
-},
-{
-"os" : "OS X",
-"os_version" : "Big Sur",
-"browser" : "Chrome",
-"browser_version" : "latest",
-"projectName" : "Amazon_testing",
-'name': 'Amazon-Parallel-Run', # test name
- 'build': 'Amazon Build Number 3'
-},
-{
-"os" : "OS X",
-"os_version" : "Big Sur",
-"browser" : "Firefox",
-"browser_version" : "latest",
-"projectName" : "Amazon_testing",
-'name': 'Amazon-Parallel-Run', # test name
- 'build': 'Amazon Build Number 4'
-},
-{
-"os" : "Windows",
-"os_version" : "10",
-"browser" : "Edge",
-"browser_version" : "latest",
-"projectName" : "Amazon_testing",
-'name': 'Amazon-Parallel-Run', # test name
- 'build': 'Amazon Build Number 5'
-}]
+        'os_version': '10',
+        'resolution': '1920x1080',
+        'browser': 'Chrome',
+        'browser_version': 'latest',
+        'os': 'Windows',
+        "projectName" : "Amazon_testing",
+        'name': 'Amazon-Parallel-Run', # test name
+        'build': 'Amazon Build Number 1' 
+    },
+    {
+        "os" : "Windows",
+        "os_version" : "10",
+        "browser" : "Firefox",
+        "browser_version" : "latest",
+        "projectName" : "Amazon_testing",
+        'name': 'Amazon-Parallel-Run', # test name
+        'build': 'Amazon Build Number 2'
+    },
+    {
+        "os" : "OS X",
+        "os_version" : "Big Sur",
+        "browser" : "Chrome",
+        "browser_version" : "latest",
+        "projectName" : "Amazon_testing",
+        'name': 'Amazon-Parallel-Run', # test name
+        'build': 'Amazon Build Number 3'
+    },
+    {
+        "os" : "OS X",
+        "os_version" : "Big Sur",
+        "browser" : "Firefox",
+        "browser_version" : "latest",
+        "projectName" : "Amazon_testing",
+        'name': 'Amazon-Parallel-Run', # test name
+        'build': 'Amazon Build Number 4'
+    },
+    {
+        "os" : "Windows",
+        "os_version" : "10",
+        "browser" : "Edge",
+        "browser_version" : "latest",
+        "projectName" : "Amazon_testing",
+        'name': 'Amazon-Parallel-Run', # test name
+        'build': 'Amazon Build Number 5'
+    }
+]
 
 def run_session(desired_cap):
     driver = webdriver.Remote(
@@ -107,32 +108,23 @@ def run_session(desired_cap):
         element.click()
     else:
         pass
-    time.sleep(3)
-
-    #Getting the HTML content
-    html_content = driver.page_source
-    #Converting raw html into bs4 object
-    soup = BeautifulSoup(html_content, 'html.parser')
-
-    # Finding All the product divs
-    main_div_all = soup.find_all("div", {"class": "sg-col-4-of-12 s-result-item s-asin sg-col-4-of-16 sg-col sg-col-4-of-20"})
 
     all_data = []
-    for divs in main_div_all:
+    products = driver.find_elements_by_xpath("//div[@data-component-type='s-search-result']")
+    for idx, product in enumerate(products):
         data = {}
-        #Picking each product and removing its details
+        link = product.find_element_by_css_selector("a").get_attribute("href")
+        name = product.find_element_by_css_selector("span.a-size-base-plus.a-color-base.a-text-normal").get_attribute("innerText")
         try:
-            data["Product_Name"] = divs.find("span", {'class': 'a-size-base-plus a-color-base a-text-normal'}).text
-            data["Link"] = divs.find("a", {"class" : "a-link-normal a-text-normal"}).get("href")
-            data["Product_Price"] = divs.find("span" , {'class': 'a-price-whole'}).text
-
-            all_data.append(data)
-        except:
-            pass
-
-    # Print the data collected
-    print(all_data[0])
-
+            price = product.find_element_by_css_selector("span.a-offscreen").get_attribute("innerText")
+        except NoSuchElementException as e:
+            price = "Price Missing"
+        data["Search Result"] = idx+1
+        data["Name"] = name
+        data["Link"] = link
+        data["Price"] = price
+        
+        all_data.append(data)
     try:
         if len(all_data) != 0:
             # print("Got response")
@@ -143,5 +135,6 @@ def run_session(desired_cap):
     finally:
         driver.quit()
 
+# run_session(caps)
 for cap in caps:
     Thread(target=run_session, args=(cap,)).start()
