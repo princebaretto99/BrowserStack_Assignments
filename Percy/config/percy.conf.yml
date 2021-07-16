@@ -1,0 +1,13 @@
+version: 1
+snapshot:
+  widths: [375, 480, 720, 1280, 1440, 1920]
+  min-height: 1024 # px
+  percy-css: |
+    .cookie-notification {
+      display: none !important;
+    };
+agent:
+  asset-discovery:
+    allowed-hostnames:
+      - 3fxtqy18kygf3on3bu39kh93-wpengine.netdna-ssl.com
+

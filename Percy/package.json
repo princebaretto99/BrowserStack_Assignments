@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "percy:prod": "PERCY_BRANCH=production percy exec -- node percy.js",
+    "percy:stage": "PERCY_BRANCH=staging PERCY_TARGET_BRANCH=production percy exec -- node percy.js",
+    "percy": "npm run percy:prod && npm run percy:stage"
   },
   "keywords": [],
   "author": "",
@@ -14,6 +17,7 @@
     "@percy/selenium-webdriver": "^1.0.0"
   },
   "dependencies": {
+    "dotenv": "^10.0.0",
     "selenium-webdriver": "^4.0.0-beta.4"
   }
 }
