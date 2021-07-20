@@ -1,0 +1,16 @@
+version: 1
+snapshot:
+  widths: [480, 720]
+  percy-css: |
+    .cookie-notification {
+      display: none !important;
+    };
+agent:
+  asset-discovery:
+    allowed-hostnames:
+      - "*.netdna-ssl.com"
+      - "*.wpengine.com"
+      - "*.cloudfront.net"
+      - "*dev.visualwebsiteoptimizer.com"
+    network-idle-timeout: 5000
+
