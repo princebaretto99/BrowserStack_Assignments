@@ -31,7 +31,6 @@ desired_cap = {
     'browserstack.local' : local,
     'browserstack.localIdentifier' : local_id
 }
-
 normal_cap = {
     "os" : "Windows",
     "os_version" : "10",

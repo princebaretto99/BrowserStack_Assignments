@@ -1,10 +1,10 @@
 const { Builder } = require("selenium-webdriver");
 const percySnapshot = require('@percy/selenium-webdriver');
 const { Options } = require("selenium-webdriver/chrome");
-// const dotenv = require('dotenv');
-// dotenv.config();
+const dotenv = require('dotenv');
+dotenv.config();
 
-const baseUrl = process.env.PERCY_BRANCH == "production" ? "https://www.browserstack.com" : "https://k8s.bsstag.com"
+const baseUrl = process.env.PERCY_BRANCH == "production" ? process.env.PROD_URL : process.env.STAGE_URL
 
 const endPoints = {
     "Index Route":"/",
